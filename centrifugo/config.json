@@ -1,0 +1,10 @@
+{
+  "token_hmac_secret_key": "your-secret-key",
+  "api_key": "your-api-key",
+  "admin_password": "admin",
+  "admin_secret": "admin-secret",
+  "admin": true,
+  "allow_subscribe_for_client": true,
+  "history_size": 10,
+  "history_ttl": "300s"
+}
