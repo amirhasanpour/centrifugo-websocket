@@ -24,6 +24,21 @@ services:
     networks:
       - chat-network
 
+  auth-service:
+    build: ./auth-service
+    ports:
+      - "50051:50051"
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=password
+      - DB_NAME=chat_app
+    depends_on:
+      - postgres
+    networks:
+      - chat-network
+
 volumes:
   postgres_data:
 
