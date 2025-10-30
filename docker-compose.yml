@@ -40,6 +40,25 @@ services:
     networks:
       - chat-network
 
+  chat-service:
+    build: ./chat-service
+    ports:
+      - "50052:50052"
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=password
+      - DB_NAME=chat_app
+      - CENTRIFUGO_URL=http://centrifugo:8000
+      - CENTRIFUGO_API_KEY=your-api-key
+      - PORT=50052
+    depends_on:
+      - postgres
+      - centrifugo
+    networks:
+      - chat-network
+
   api-gateway:
     build: ./api-gateway
     ports:
