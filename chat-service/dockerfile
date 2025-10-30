@@ -1,0 +1,41 @@
+FROM golang:1.25.1-alpine AS builder
+
+WORKDIR /app
+
+# Install protoc and dependencies
+RUN apk add --no-cache protoc git
+
+# Install Go protoc plugins
+RUN go install google.golang.org/protobuf/cmd/protoc-gen-go@latest \
+    && go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+
+# Add Go bin path to PATH (for protoc to find the plugins)
+ENV PATH="/go/bin:${PATH}"
+
+# Copy go mod files
+COPY go.mod go.sum ./
+RUN go mod download
+
+# Copy source code
+COPY . .
+
+# Generate gRPC code
+RUN protoc --go_out=internal/proto --go-grpc_out=internal/proto internal/proto/chat.proto
+
+# Build the application
+RUN go build -o chat-service ./cmd/server
+
+FROM alpine:latest
+
+RUN apk --no-cache add ca-certificates
+
+WORKDIR /root/
+
+# Copy the binary from builder
+COPY --from=builder /app/chat-service .
+
+# Expose gRPC port
+EXPOSE 50052
+
+# Run the application
+CMD ["./chat-service"]
