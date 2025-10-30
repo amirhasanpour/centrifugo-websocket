@@ -5,6 +5,19 @@
   "admin_secret": "admin-secret",
   "admin": true,
   "allow_subscribe_for_client": true,
-  "history_size": 10,
-  "history_ttl": "300s"
+  "history_size": 100,
+  "history_ttl": "300s",
+  "presence": true,
+  "join_leave": true,
+  "publish": true,
+  "subscribe_to_publish": true,
+  "namespaces": [
+    {
+      "name": "chat",
+      "history_size": 100,
+      "history_ttl": "300s",
+      "presence": true,
+      "join_leave": true
+    }
+  ]
 }
