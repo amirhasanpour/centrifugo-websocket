@@ -1,0 +1,76 @@
+syntax = "proto3";
+
+package chat;
+
+option go_package = "chat-service/internal/proto";
+
+service ChatService {
+  rpc CreateRoom(CreateRoomRequest) returns (CreateRoomResponse);
+  rpc GetRooms(GetRoomsRequest) returns (GetRoomsResponse);
+  rpc JoinRoom(JoinRoomRequest) returns (JoinRoomResponse);
+  rpc SendMessage(SendMessageRequest) returns (SendMessageResponse);
+  rpc GetRoomMessages(GetRoomMessagesRequest) returns (GetRoomMessagesResponse);
+}
+
+message Room {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  string created_by = 4;
+  string created_at = 5;
+  string updated_at = 6;
+}
+
+message Message {
+  string id = 1;
+  string room_id = 2;
+  string user_id = 3;
+  string username = 4;
+  string content = 5;
+  string created_at = 6;
+}
+
+message CreateRoomRequest {
+  string name = 1;
+  string description = 2;
+  string user_id = 3;
+}
+
+message CreateRoomResponse {
+  Room room = 1;
+}
+
+message GetRoomsRequest {}
+
+message GetRoomsResponse {
+  repeated Room rooms = 1;
+}
+
+message JoinRoomRequest {
+  string room_id = 1;
+  string user_id = 2;
+}
+
+message JoinRoomResponse {
+  bool success = 1;
+  string room_id = 2;
+}
+
+message SendMessageRequest {
+  string room_id = 1;
+  string user_id = 2;
+  string content = 3;
+}
+
+message SendMessageResponse {
+  Message message = 1;
+}
+
+message GetRoomMessagesRequest {
+  string room_id = 1;
+  int32 limit = 2;
+}
+
+message GetRoomMessagesResponse {
+  repeated Message messages = 1;
+}
