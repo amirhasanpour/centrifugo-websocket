@@ -34,3 +34,44 @@ type ValidateTokenResponse struct {
 	UserID   string `json:"user_id,omitempty"`
 	Username string `json:"username,omitempty"`
 }
+
+type CreateRoomRequest struct {
+	Name        string `json:"name" validate:"required,min=1,max=100"`
+	Description string `json:"description" validate:"max=500"`
+}
+
+type SendMessageRequest struct {
+	RoomID  string `json:"room_id" validate:"required"`
+	Content string `json:"content" validate:"required,min=1,max=1000"`
+}
+
+type RoomResponse struct {
+	ID          string `json:"id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	CreatedBy   string `json:"created_by"`
+	CreatedAt   string `json:"created_at"`
+	UpdatedAt   string `json:"updated_at"`
+}
+
+type MessageResponse struct {
+	ID        string `json:"id"`
+	RoomID    string `json:"room_id"`
+	UserID    string `json:"user_id"`
+	Username  string `json:"username"`
+	Content   string `json:"content"`
+	CreatedAt string `json:"created_at"`
+}
+
+type JoinRoomRequest struct {
+	RoomID string `json:"room_id" validate:"required"`
+}
+
+type SendMessageResponse struct {
+	Message MessageResponse `json:"message"`
+}
+
+type JoinRoomResponse struct {
+	Success bool   `json:"success"`
+	RoomID  string `json:"room_id"`
+}
