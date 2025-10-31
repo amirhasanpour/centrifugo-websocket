@@ -31,7 +31,7 @@ type PublishResponse struct {
 func NewCentrifugoClient() (*CentrifugoClient, error) {
 	centrifugoURL := os.Getenv("CENTRIFUGO_URL")
 	if centrifugoURL == "" {
-		centrifugoURL = "http://localhost:8000"
+		centrifugoURL = "ws://localhost:8000"
 	}
 
 	apiKey := os.Getenv("CENTRIFUGO_API_KEY")
