@@ -24,8 +24,14 @@ func main() {
 	}
 	defer authClient.Close()
 
+	chatClient, err := clients.NewChatClient()
+	if err != nil {
+		log.Fatalf("Failed to connect to chat service: %v", err)
+	}
+	defer chatClient.Close()
+
 	// Initialize HTTP handler
-	httpHandler := handler.NewHTTPHandler(authClient)
+	httpHandler := handler.NewHTTPHandler(authClient, chatClient)
 
 	// Create Fiber app
 	app := fiber.New(fiber.Config{
@@ -62,6 +68,13 @@ func main() {
 
 	// Auth routes
 	protected.Get("/auth/profile", httpHandler.GetProfile)
+
+	// Chat routes
+	protected.Post("/chat/rooms", httpHandler.CreateRoom)
+	protected.Get("/chat/rooms", httpHandler.GetRooms)
+	protected.Get("/chat/rooms/:roomId/messages", httpHandler.GetRoomMessages)
+	protected.Post("/chat/messages", httpHandler.SendMessage)
+	protected.Post("/chat/rooms/join", httpHandler.JoinRoom)
 
 	// Start server
 	port := os.Getenv("PORT")
